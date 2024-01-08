@@ -10,13 +10,11 @@ namespace MineSweeper.UnitTests
             MineSweeper = new MineSweeper();
         }
 
-        [Test]
-        public void CreateGrid_ValidInput_GridCreatedWithMines()
+        [TestCase(5, 5)]
+        [TestCase(8, 10)]
+        [TestCase(10, 15)]
+        public void CreateGrid_ValidInput_GridCreatedWithMines(int size, int mines)
         {
-            // Arrange
-            int size = 5;
-            int mines = 5;
-
             // Act
             char[,] grid = MineSweeper.CreateGrid(size, mines);
 
@@ -32,7 +30,7 @@ namespace MineSweeper.UnitTests
                     }
                 }
             }
-            Assert.AreEqual(mines, mineCount);
+            Assert.That(mineCount, Is.EqualTo(mines));
         }
 
         [Test]
@@ -53,32 +51,30 @@ namespace MineSweeper.UnitTests
             Assert.That(count, Is.EqualTo(8));
         }
 
-        [TestCase(5, 5)]
-        [TestCase(8, 10)]
-        [TestCase(10, 15)]
-        public void GridCreation_Test(int size, int mines)
+        [Test]
+        public void Uncover_Test()
         {
-            char[,] grid = MineSweeper.CreateGrid(size, mines);
-
-            int mineCount = 0;
-            int totalCells = size * size;
-            for (int i = 0; i < size; i++)
+            char[,] grid = new char[,]
             {
-                for (int j = 0; j < size; j++)
-                {
-                    if (grid[i, j] == 'X')
-                    {
-                        mineCount++;
-                    }
-                }
-            }
+            {' ', 'X', ' '},
+            {'X', 'X', ' '},
+            {' ', ' ', 'X'}
+            };
 
-            Assert.Multiple(() =>
+            bool[,] visited = new bool[,]
             {
-                Assert.That(mineCount, Is.EqualTo(mines));
-                Assert.That((totalCells - mineCount), Is.EqualTo(totalCells - mines));
-            });
+            {false, false, false},
+            {false, false, false},
+            {false, false, false}
+            };
+
+            MineSweeper.Uncover(grid, 0, 0, visited);
+
+            Assert.That(grid[1, 0], Is.EqualTo('X'));
+            Assert.That(grid[2, 0], Is.EqualTo(' '));
+            Assert.That(grid[0, 1], Is.EqualTo('X'));
+            Assert.That(grid[1, 1], Is.EqualTo('X'));
+            Assert.That(grid[2, 1], Is.EqualTo(' '));
         }
-
     }
 }
