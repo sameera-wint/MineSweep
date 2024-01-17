@@ -1,70 +1,54 @@
 ﻿using MineSweeper.Constants;
 using MineSweeper.Resources;
+using MineSweeper.Validations;
 using MineSweeperSystem = MineSweeper.Systems.MineSweeper;
 
 Console.WriteLine(Resource.WelcomeMessage);
 
 #region Validate Grid size & Mines count
 int size;
-var minSize = MineSweeperConstants.MinGridSize;
-var maxSize = MineSweeperConstants.MaxGridSize;
+int mines;
+
+var inputValidator = new InputValidator();
 
 while (true)
 {
     Console.Write(Resource.GridInputHelpText);
     var sizeInput = Console.ReadLine();
-    _ = int.TryParse(sizeInput, out size);
 
-    if (sizeInput == null || !sizeInput.All(char.IsNumber))
+    var validationResult = inputValidator.GetValidateGridSize(sizeInput);
+
+    if (validationResult.IsSuccess == false)
     {
-        Console.WriteLine(Resource.IncorrectInput);
+        foreach ( var validationMessage in validationResult.ValidationMessages)
+            Console.WriteLine(validationMessage);
+        continue;
     }
-    else if (size < minSize)
-    {
-        Console.WriteLine(Resource.GridMinValidation, minSize);
-    }
-    else if (size > maxSize)
-    {
-        Console.WriteLine(Resource.GridMaxValidation, maxSize);
-    }
-    else if (size >= minSize && size <= maxSize)
-    {
-        break;
-    }
+    size = validationResult.Result;
+    break;
 }
 
-int mines;
-var minMines = 1;
-var maxMines = (int)(size * size * (MineSweeperConstants.MinesPercentageMax / 100));
 while (true)
 {
     Console.Write(Resource.MinesInputHelpText);
-    
     var mineInput = Console.ReadLine();
-    _ = int.TryParse(mineInput, out mines);
+    
+    var validationResult = inputValidator.GetValidateMinesCount(mineInput, size);
 
-    if (mineInput == null || !mineInput.All(char.IsNumber))
+    if (validationResult.IsSuccess == false)
     {
-        Console.WriteLine(Resource.IncorrectInput);
+        foreach (var validationMessage in validationResult.ValidationMessages)
+            Console.WriteLine(validationMessage);
+        continue;
     }
-    else if (mines < minMines)
-    {
-        Console.WriteLine(Resource.MinesMinValidation);
-    }
-    else if (mines > maxMines)
-    {
-        Console.WriteLine(Resource.MinesMaxValidation);
-    }
-    else if (mines >= minMines && mines <= maxMines)
-    {
-        break;
-    }
+    mines = validationResult.Result;
+    break;
 }
 #endregion
 
 char[,] grid = MineSweeperSystem.CreateGrid(size, mines);
 
-var uncoveredCount = 0;
+var uncoveredCount = mines;
 var totalCount = size * size - mines;
 bool[,] visited = new bool[size, size];
 
@@ -88,16 +72,17 @@ while (true)
         continue;
     }
 
+    if (!visited[x, y])
+    {
+        MineSweeperSystem.Uncover(grid, x, y, visited);
+        uncoveredCount++;
+    }
+
     if (grid[x, y] == MineSweeperConstants.MineSymbol)
     {
         Console.WriteLine(Resource.GameOverText);
         MineSweeperSystem.PrintGrid(grid, true);
         break;
-    }
-    if (!visited[x, y])
-    {
-        MineSweeperSystem.Uncover(grid, x, y, visited);
-        uncoveredCount++;
     }
     if (uncoveredCount == totalCount)
     {
