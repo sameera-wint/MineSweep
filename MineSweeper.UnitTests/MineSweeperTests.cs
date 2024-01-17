@@ -1,13 +1,15 @@
+using MineSweeperSystem = MineSweeper.Systems.MineSweeper;
+
 namespace MineSweeper.UnitTests
 {
     public class MineSweeperTests
     {
-        public MineSweeper MineSweeper { get; set; }
+        public MineSweeperSystem MineSweeper { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            MineSweeper = new MineSweeper();
+            MineSweeper = new MineSweeperSystem();
         }
 
         [TestCase(5, 5)]
@@ -16,7 +18,7 @@ namespace MineSweeper.UnitTests
         public void CreateGrid_ValidInput_GridCreatedWithMines(int size, int mines)
         {
             // Act
-            char[,] grid = MineSweeper.CreateGrid(size, mines);
+            char[,] grid = MineSweeperSystem.CreateGrid(size, mines);
 
             // Assert
             int mineCount = 0;
@@ -45,7 +47,7 @@ namespace MineSweeper.UnitTests
             };
 
             // Act
-            int count = MineSweeper.CountAdjacentMines(grid, 1, 1);
+            int count = MineSweeperSystem.CountAdjacentMines(grid, 1, 1);
 
             // Assert
             Assert.That(count, Is.EqualTo(8));
@@ -68,7 +70,7 @@ namespace MineSweeper.UnitTests
             {false, false, false}
             };
 
-            MineSweeper.Uncover(grid, 0, 0, visited);
+            MineSweeperSystem.Uncover(grid, 0, 0, visited);
 
             Assert.That(grid[1, 0], Is.EqualTo('X'));
             Assert.That(grid[2, 0], Is.EqualTo(' '));

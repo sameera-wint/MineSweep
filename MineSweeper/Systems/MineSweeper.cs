@@ -4,6 +4,8 @@ namespace MineSweeper.Systems
 {
     public class MineSweeper
     {
+        public static int UncoveredCount { get; set; }
+
         public static char[,] CreateGrid(int size, int mines)
         {
             char[,] grid = new char[size, size];
@@ -29,6 +31,7 @@ namespace MineSweeper.Systems
                     placedMines++;
                 }
             }
+            UncoveredCount = placedMines;
 
             return grid;
         }
@@ -71,6 +74,7 @@ namespace MineSweeper.Systems
             }
 
             visited[x, y] = true;
+            UncoveredCount++;
 
             if (grid[x, y] != ' ')
             {

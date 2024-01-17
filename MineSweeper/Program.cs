@@ -48,7 +48,6 @@ while (true)
 
 char[,] grid = MineSweeperSystem.CreateGrid(size, mines);
 
-var uncoveredCount = mines;
 var totalCount = size * size - mines;
 bool[,] visited = new bool[size, size];
 
@@ -75,7 +74,6 @@ while (true)
     if (!visited[x, y])
     {
         MineSweeperSystem.Uncover(grid, x, y, visited);
-        uncoveredCount++;
     }
 
     if (grid[x, y] == MineSweeperConstants.MineSymbol)
@@ -84,7 +82,7 @@ while (true)
         MineSweeperSystem.PrintGrid(grid, true);
         break;
     }
-    if (uncoveredCount == totalCount)
+    if (MineSweeperSystem.UncoveredCount > totalCount)
     {
         Console.WriteLine(Resource.GameWonText);
         MineSweeperSystem.PrintGrid(grid, true);
