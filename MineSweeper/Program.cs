@@ -2,7 +2,7 @@
 using MineSweeper.Resources;
 using MineSweeperSystem = MineSweeper.Systems.MineSweeper;
 
-Console.Write(Resource.WelcomeMessage);
+Console.WriteLine(Resource.WelcomeMessage);
 
 #region Validate Grid size & Mines count
 int size;
