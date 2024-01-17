@@ -1,11 +1,13 @@
-﻿namespace MineSweeper
+﻿using MineSweeper.Constants;
+
+namespace MineSweeper.Systems
 {
     public class MineSweeper
     {
         public static char[,] CreateGrid(int size, int mines)
         {
             char[,] grid = new char[size, size];
-            Random rand = new Random();
+            Random rand = new();
 
             for (int i = 0; i < size; i++)
             {
@@ -21,9 +23,9 @@
                 int x = rand.Next(0, size);
                 int y = rand.Next(0, size);
 
-                if (grid[x, y] != 'X')
+                if (grid[x, y] != MineSweeperConstants.MineSymbol)
                 {
-                    grid[x, y] = 'X';
+                    grid[x, y] = MineSweeperConstants.MineSymbol;
                     placedMines++;
                 }
             }
@@ -53,7 +55,7 @@
                     {
                         Console.Write((char)(i + 65) + " ");
                     }
-                    var cellText = grid[i, j] == 'X' && !showMines ? " " : grid[i, j].ToString();
+                    var cellText = grid[i, j] == MineSweeperConstants.MineSymbol && !showMines ? " " : grid[i, j].ToString();
                     Console.Write(cellText + " ");
                 }
                 Console.WriteLine();
@@ -97,7 +99,7 @@
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    if (x + i >= 0 && x + i < grid.GetLength(0) && y + j >= 0 && y + j < grid.GetLength(1) && grid[x + i, y + j] == 'X')
+                    if (x + i >= 0 && x + i < grid.GetLength(0) && y + j >= 0 && y + j < grid.GetLength(1) && grid[x + i, y + j] == MineSweeperConstants.MineSymbol)
                     {
                         count++;
                     }

@@ -1,11 +1,13 @@
-﻿using MineSweeper;
+﻿using MineSweeper.Constants;
+using MineSweeper.Resources;
+using MineSweeperSystem = MineSweeper.Systems.MineSweeper;
 
 Console.Write(Resource.WelcomeMessage);
 
 #region Validate Grid size & Mines count
 int size;
-var minSize = 3;
-var maxSize = 10;
+var minSize = MineSweeperConstants.MinGridSize;
+var maxSize = MineSweeperConstants.MaxGridSize;
 
 while (true)
 {
@@ -25,7 +27,7 @@ while (true)
     {
         Console.Write(Resource.GridMaxValidation, maxSize);
     }
-    else if (size >= 3 && size <= 10)
+    else if (size >= minSize && size <= maxSize)
     {
         break;
     }
@@ -33,7 +35,7 @@ while (true)
 
 int mines;
 var minMines = 1;
-var maxMines = (int)(size * size * 0.35); // Maximum 35% of cells can be mines
+var maxMines = (int)(size * size * (MineSweeperConstants.MinesPercentageMax / 100));
 while (true)
 {
     Console.Write(Resource.MinesInputHelpText);
@@ -60,15 +62,15 @@ while (true)
 }
 #endregion
 
-char[,] grid = MineSweeper.MineSweeper.CreateGrid(size, mines);
+char[,] grid = MineSweeperSystem.CreateGrid(size, mines);
 
-int uncoveredCount = 0;
-int totalCount = size * size - mines;
+var uncoveredCount = 0;
+var totalCount = size * size - mines;
 bool[,] visited = new bool[size, size];
 
 while (true)
 {
-    MineSweeper.MineSweeper.PrintGrid(grid);
+    MineSweeperSystem.PrintGrid(grid);
 
     Console.Write(Resource.SelectCellText);
     var cell = Console.ReadLine();
@@ -79,28 +81,28 @@ while (true)
     }
 
     int x = cell[0] - 65;
-    int y = int.Parse(cell[1].ToString())-1;
+    int y = int.Parse(cell[1].ToString()) - 1;
     if (x >= size || y >= size)
     {
         Console.WriteLine(Resource.IncorrectInput);
         continue;
     }
 
-    if (grid[x, y] == 'X')
+    if (grid[x, y] == MineSweeperConstants.MineSymbol)
     {
         Console.WriteLine(Resource.GameOverText);
-        MineSweeper.MineSweeper.PrintGrid(grid, true);
+        MineSweeperSystem.PrintGrid(grid, true);
         break;
     }
     if (!visited[x, y])
     {
-        MineSweeper.MineSweeper.Uncover(grid, x, y, visited);
+        MineSweeperSystem.Uncover(grid, x, y, visited);
         uncoveredCount++;
     }
     if (uncoveredCount == totalCount)
     {
         Console.WriteLine(Resource.GameWonText);
-        MineSweeper.MineSweeper.PrintGrid(grid, true);
+        MineSweeperSystem.PrintGrid(grid, true);
         break;
     }
 }
