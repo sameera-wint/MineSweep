@@ -16,5 +16,6 @@ command line interface.
 - Additionally, the program track the user's progress throughout the game, displaying the
 minefield after each user input.
 
+:earth_asia: ***New Language can be added by adding a new resource file and changing the Culture***
 
 *Developed by Sameera Rukshan*
