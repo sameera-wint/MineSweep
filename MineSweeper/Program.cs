@@ -17,15 +17,15 @@ while (true)
 
     if (sizeInput == null || !sizeInput.All(char.IsNumber))
     {
-        Console.Write(Resource.IncorrectInput);
+        Console.WriteLine(Resource.IncorrectInput);
     }
     else if (size < minSize)
     {
-        Console.Write(Resource.GridMinValidation, minSize);
+        Console.WriteLine(Resource.GridMinValidation, minSize);
     }
     else if (size > maxSize)
     {
-        Console.Write(Resource.GridMaxValidation, maxSize);
+        Console.WriteLine(Resource.GridMaxValidation, maxSize);
     }
     else if (size >= minSize && size <= maxSize)
     {
@@ -45,15 +45,15 @@ while (true)
 
     if (mineInput == null || !mineInput.All(char.IsNumber))
     {
-        Console.Write(Resource.IncorrectInput);
+        Console.WriteLine(Resource.IncorrectInput);
     }
     else if (mines < minMines)
     {
-        Console.Write(Resource.MinesMinValidation);
+        Console.WriteLine(Resource.MinesMinValidation);
     }
     else if (mines > maxMines)
     {
-        Console.Write(Resource.MinesMaxValidation);
+        Console.WriteLine(Resource.MinesMaxValidation);
     }
     else if (mines >= minMines && mines <= maxMines)
     {
